@@ -7,7 +7,24 @@
 
 
 function retryOnce(fn) {
-
+    let value
+    let count = 0
+    return async function(...args){
+        const promise = () =>  Promise.resolve(fn.apply(this,args)).then(data => {return {err:null,result:'success'}}).catch(err => 'error')
+        if(count <=2){
+            try {
+                value = await promise()
+                if(value === 'error'){
+                    value = await promise()
+                }
+            } catch (error) {
+                
+            }
+            count++
+        }
+        return value
+    }
+        
 }
 
 module.exports = retryOnce;

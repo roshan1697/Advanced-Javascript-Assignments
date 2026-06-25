@@ -8,8 +8,46 @@
 // If the operation exceeds the time limit, the callback is invoked with an Error
 // whose message is "Request Timed Out".
 
-
 function fetchWithTimeout(url, ms, callback) {
+
+    let isDone = false
+
+    const timer = setTimeout(() => {
+        if (!isDone) {
+            isDone = true
+            callback(new Error('Request Timed Out'))
+        }
+    }, ms)
+    const fetchURL = async (url) => {
+        const res = await fetch(url, {
+            "method": 'GET',
+            "headers": {
+                'Content-Type': 'application/json',
+
+            }
+        })
+        if (!res.ok)
+            error("Response not ok!")
+        
+        return res.json()
+
+
+    }
+    fetchURL(url)
+
+        .then(data => {
+            isDone = true
+            
+            callback(null, data)
+            clearTimeout(timer)
+        })
+        .catch(err => {
+            isDone = true
+            callback(err)
+            clearTimeout(timer)
+        })
+
+
 
 }
 

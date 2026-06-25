@@ -7,7 +7,16 @@
 // the callback with the same result (or error) from the first invocation.
 
 function once(fn) {
-
+    let called = false
+    let result
+    return async function(...args) {
+        
+        if(!called){
+            called = true
+            return result = await Promise.resolve(fn.apply(this,args))
+        }
+        return result
+    }
 }
 
 module.exports = once;

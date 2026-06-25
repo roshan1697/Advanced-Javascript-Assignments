@@ -9,7 +9,17 @@
 
 
 function delayResult(value, ms) {
-
+    return new Promise((resolve,reject)=>{
+        let done = true
+        setTimeout(()=>{
+            if(done){
+                resolve(value)
+            }
+            else {
+                reject('err')
+            }
+        },ms)
+    })
 }
 
 module.exports = delayResult;
