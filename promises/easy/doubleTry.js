@@ -9,9 +9,17 @@
 // // If the second attempt fails, reject with the error.
 
 async function doubleTry(fn) {
-    return new Promise((resolve,reject)=>{
-        
-    })
+    try {
+        return await fn()
+    } catch (error) {
+        try {
+            return await fn()
+            
+        } catch (error) {
+            return Promise.reject(new Error('Failure 2'))
+        }
+    }
+    
 
 }
 
